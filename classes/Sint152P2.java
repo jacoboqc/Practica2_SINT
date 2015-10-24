@@ -5,6 +5,20 @@ import javax.servlet.http.*;
 public class Sint152P2 extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse res)
 	throws ServletException, IOException {
+		int consulta, fase, interprete, album, año, estilo;
+		consulta = fase = interprete = album = año = estilo = 0;
+		try{
+			if(!req.getParameterMap().isEmpty()){
+				consulta = Integer.parseInt(req.getParameter("consulta"));
+				fase = Integer.parseInt(req.getParameter("fase"));
+				interprete = Integer.parseInt(req.getParameter("interprete"));
+				album = Integer.parseInt(req.getParameter("album"));
+				año = Integer.parseInt(req.getParameter("año"));
+				estilo = Integer.parseInt(req.getParameter("estilo"));	
+			}
+		}catch(NumberFormatException e){
+				System.out.println("Error de parseo de int");
+		}
 		printPage(res);
 	}
 	
@@ -18,10 +32,12 @@ public class Sint152P2 extends HttpServlet {
 		out.println("<body>");
 		out.println("<div align=\"center\">");
 		out.println("<h1>Servicio de consulta de información musical</h1>");
+		
 		out.println("<h2>Selecciona una consulta:</h2>");
+		
 		out.println("<form>");
-		out.println("<input type=\"radio\" name=\"consulta\" value=\"lista\" checked>Lista de canciones de un álbum<br>");
-		out.println("<input type=\"radio\" name=\"consulta\" value=\"numero\">Número de canciones de un álbum<br>");
+		out.println("<input type=\"radio\" name=\"consulta\" value=1 checked>Lista de canciones de un álbum<br>");
+		out.println("<input type=\"radio\" name=\"consulta\" value=2>Número de canciones de un álbum<br>");
 		out.println("<input type=\"submit\" value=\"enviar\">");
 		out.println("</form>");
 		out.println("<hr>");
