@@ -1,12 +1,19 @@
 import java.io.*;
+import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
 public class Sint152P2 extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse res)
 	throws ServletException, IOException {
+		Map<String, Integer> vars = createMap(req);
+		printPage(res, vars);
+	}
+	
+	Map<String, Integer> createMap(HttpServletRequest req){
 		int consulta, fase, interprete, album, año, estilo;
 		consulta = fase = interprete = album = año = estilo = 0;
+		Map<String, Integer> vars = new HashMap<String, Integer>();
 		try{
 			if(!req.getParameterMap().isEmpty()){
 				consulta = Integer.parseInt(req.getParameter("consulta"));
@@ -19,10 +26,16 @@ public class Sint152P2 extends HttpServlet {
 		}catch(NumberFormatException e){
 				System.out.println("Error de parseo de int");
 		}
-		printPage(res);
+		vars.put("consulta", consulta);
+		vars.put("fase", fase);
+		vars.put("interprete", interprete);
+		vars.put("album", album);
+		vars.put("año", año);
+		vars.put("estilo", estilo);
+		return vars;
 	}
 	
-	void printPage(HttpServletResponse res) throws IOException {
+	void printPage(HttpServletResponse res, Map vars) throws IOException {
 		res.setContentType("text/html");
 		PrintWriter out = res.getWriter();
 		out.println("<html>");
@@ -33,7 +46,14 @@ public class Sint152P2 extends HttpServlet {
 		out.println("<div align=\"center\">");
 		out.println("<h1>Servicio de consulta de información musical</h1>");
 		
-		out.println("<h2>Selecciona una consulta:</h2>");
+		out.println("<h2>Selecciona");
+		if((int)vars.get("consulta")==1){
+			out.println(" un intérprete:</h2>");
+		}else if((int)vars.get("consulta")==2){
+			out.println(" un año:</h2>");
+		}else if((int)vars.get("consulta")==0){
+			out.println(" una consulta:</h2>");
+		}
 		
 		out.println("<form>");
 		out.println("<input type=\"radio\" name=\"consulta\" value=1 checked>Lista de canciones de un álbum<br>");
