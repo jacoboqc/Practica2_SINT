@@ -45,21 +45,7 @@ public class Sint152P2 extends HttpServlet {
 		out.println("<body>");
 		out.println("<div align=\"center\">");
 		out.println("<h1>Servicio de consulta de información musical</h1>");
-		
-		out.println("<h2>Selecciona");
-		if((int)vars.get("consulta")==1){
-			out.println(" un intérprete:</h2>");
-		}else if((int)vars.get("consulta")==2){
-			out.println(" un año:</h2>");
-		}else if((int)vars.get("consulta")==0){
-			out.println(" una consulta:</h2>");
-		}
-		
-		out.println("<form>");
-		out.println("<input type=\"radio\" name=\"consulta\" value=1 checked>Lista de canciones de un álbum<br>");
-		out.println("<input type=\"radio\" name=\"consulta\" value=2>Número de canciones de un álbum<br>");
-		out.println("<input type=\"submit\" value=\"enviar\">");
-		out.println("</form>");
+		printForm(out, vars);
 		out.println("<hr>");
 		out.println("Práctica de la asignatura Servicios de Internet - Curso 2015/16<br>");
 		out.println("Escuela de Ingeniería de Telecomunicación - Universidad de Vigo<br>");
@@ -68,5 +54,65 @@ public class Sint152P2 extends HttpServlet {
 		out.println("</div>");
 		out.println("</body>");
 		out.println("</html>");
+	}
+	
+	void printForm(PrintWriter out, Map vars){
+		if((int)vars.get("consulta")==1){
+			if((int)vars.get("fase")==1){
+				out.println("<h2>Selecciona un intérprete:</h2>");
+				out.println("<form>");
+				out.println("<input type=\"radio\" name=\"interprete\" value=1 checked>Intérprete 1<br>");
+				out.println("<input type=\"radio\" name=\"interprete\" value=2>Intérprete 2<br>");
+				out.println("<input type=\"radio\" name=\"interprete\" value=3>Intérprete 3<br>");
+				out.println("<input type=\"radio\" name=\"interprete\" value=4>Intérprete 4<br>");
+				out.println("<input type=\"hidden\" name=\"fase\" value=2><br>");
+			}
+			if((int)vars.get("fase")==2){
+				out.println("<h2>Selecciona un álbum:</h2>");
+				out.println("<form>");
+				out.println("<input type=\"radio\" name=\"album\" value=1 checked>Álbum 1<br>");
+				out.println("<input type=\"radio\" name=\"album\" value=2>Álbum 2<br>");
+				out.println("<input type=\"radio\" name=\"album\" value=3>Álbum 3<br>");
+				out.println("<input type=\"hidden\" name=\"fase\" value=3><br>");
+			}
+		}else if((int)vars.get("consulta")==2){
+			if((int)vars.get("fase")==1){
+				out.println("<h2>Selecciona un año:</h2>");
+				out.println("<form>");
+				out.println("<input type=\"radio\" name=\"año\" value=1 checked>Año 1<br>");
+				out.println("<input type=\"radio\" name=\"año\" value=2>Año 2<br>");
+				out.println("<input type=\"radio\" name=\"año\" value=3>Año 3<br>");
+				out.println("<input type=\"radio\" name=\"año\" value=4>Año 4<br>");
+				out.println("<input type=\"hidden\" name=\"fase\" value=2><br>");
+			}
+			if((int)vars.get("fase")==2){
+				out.println("<h2>Selecciona un álbum:</h2>");
+				out.println("<form>");
+				out.println("<input type=\"radio\" name=\"album\" value=1 checked>Álbum 1<br>");
+				out.println("<input type=\"radio\" name=\"album\" value=2>Álbum 2<br>");
+				out.println("<input type=\"radio\" name=\"album\" value=3>Álbum 3<br>");
+				out.println("<input type=\"radio\" name=\"album\" value=4>Álbum 4<br>");	
+				out.println("<input type=\"hidden\" name=\"fase\" value=3><br>");			
+			}
+			if((int)vars.get("fase")==3){
+				out.println("<h2>Selecciona un estilo:</h2>");
+				out.println("<form>");
+				out.println("<input type=\"radio\" name=\"estilo\" value=1 checked>Estilo 1<br>");
+				out.println("<input type=\"radio\" name=\"estilo\" value=2>Estilo 2<br>");
+				out.println("<input type=\"radio\" name=\"estilo\" value=3>Estilo 3<br>");
+				out.println("<input type=\"radio\" name=\"estilo\" value=4>Estilo 4<br>");
+				out.println("<input type=\"hidden\" name=\"fase\" value=4><br>");
+			}
+			if((int)vars.get("fase")==3){
+			}	
+		}else if((int)vars.get("consulta")==0){
+			out.println("<h2>Selecciona una consulta:</h2>");
+			out.println("<form>");
+			out.println("<input type=\"radio\" name=\"consulta\" value=1 checked>Lista de canciones de un álbum<br>");
+			out.println("<input type=\"radio\" name=\"consulta\" value=2>Número de canciones de un álbum<br>");
+			out.println("<input type=\"hidden\" name=\"fase\" value=1><br>");
+		}
+		out.println("<input type=\"submit\" value=\"enviar\">");
+		out.println("</form>");
 	}
 }
