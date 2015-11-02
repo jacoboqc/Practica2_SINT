@@ -57,7 +57,14 @@ public class Sint152P2 extends HttpServlet {
 	}
 
 	void printForm(PrintWriter out, Map vars){
-		if((Integer)vars.get("consulta")==1){
+		if((Integer)vars.get("consulta")==0 || (Integer)vars.get("fase")==0){
+			out.println("<h2>Selecciona una consulta:</h2>");
+			out.println("<form>");
+			out.println("<input type=\"radio\" name=\"consulta\" value=1 checked>Lista de canciones de un álbum<br>");
+			out.println("<input type=\"radio\" name=\"consulta\" value=2>Número de canciones de un álbum<br>");
+			out.println("<input type=\"hidden\" name=\"fase\" value=1><br>");
+			out.println("<input type=\"submit\" value=\"enviar\">");
+		}else if((Integer)vars.get("consulta")==1){
 			if((Integer)vars.get("fase")==1){
 				out.println("<h2>Selecciona un intérprete:</h2>");
 				out.println("<form>");
@@ -67,6 +74,7 @@ public class Sint152P2 extends HttpServlet {
 				out.println("<input type=\"radio\" name=\"interprete\" value=4>Intérprete 4<br>");
 				out.println("<input type=\"hidden\" name=\"consulta\" value=1><br>");
 				out.println("<input type=\"hidden\" name=\"fase\" value=2><br>");
+				out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+((Integer)vars.get("fase")-1)+"\">");
 				out.println("<input type=\"submit\" value=\"enviar\">");
 			}
 			if((Integer)vars.get("fase")==2){
@@ -78,6 +86,7 @@ public class Sint152P2 extends HttpServlet {
 				out.println("<input type=\"radio\" name=\"album\" value=4>Álbum 4<br>");
 				out.println("<input type=\"hidden\" name=\"consulta\" value=1><br>");
 				out.println("<input type=\"hidden\" name=\"fase\" value=3><br>");
+				out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+((Integer)vars.get("fase")-1)+"\">");
 				out.println("<input type=\"submit\" value=\"inicio\" onclick=\"form.consulta.value=0\">");
 				out.println("<input type=\"submit\" value=\"enviar\">");
 			}
@@ -89,6 +98,8 @@ public class Sint152P2 extends HttpServlet {
 				out.println("<li>Canción 3 (duración, descripción)</li>");
 				out.println("<li>Canción 4 (duración, descripción)</li><br>");
 				out.println("<input type=\"hidden\" name=\"consulta\" value=1><br>");
+				out.println("<input type=\"hidden\" name=\"fase\" value=4><br>");
+				out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+((Integer)vars.get("fase")-1)+"\">");
 				out.println("<input type=\"submit\" value=\"inicio\" onclick=\"form.consulta.value=0\">");
 			}
 		}else if((Integer)vars.get("consulta")==2){
@@ -101,6 +112,7 @@ public class Sint152P2 extends HttpServlet {
 				out.println("<input type=\"radio\" name=\"año\" value=4>Año 4<br>");
 				out.println("<input type=\"hidden\" name=\"consulta\" value=2><br>");
 				out.println("<input type=\"hidden\" name=\"fase\" value=2><br>");
+				out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+((Integer)vars.get("fase")-1)+"\">");
 				out.println("<input type=\"submit\" value=\"enviar\">");
 			}
 			if((Integer)vars.get("fase")==2){
@@ -112,6 +124,7 @@ public class Sint152P2 extends HttpServlet {
 				out.println("<input type=\"radio\" name=\"album\" value=4>Álbum 4<br>");
 				out.println("<input type=\"hidden\" name=\"consulta\" value=2><br>");
 				out.println("<input type=\"hidden\" name=\"fase\" value=3><br>");
+				out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+((Integer)vars.get("fase")-1)+"\">");
 				out.println("<input type=\"submit\" value=\"inicio\" onclick=\"form.consulta.value=0\">");
 				out.println("<input type=\"submit\" value=\"enviar\">");
 			}
@@ -124,6 +137,7 @@ public class Sint152P2 extends HttpServlet {
 				out.println("<input type=\"radio\" name=\"estilo\" value=4>Estilo 4<br>");
 				out.println("<input type=\"hidden\" name=\"consulta\" value=2><br>");
 				out.println("<input type=\"hidden\" name=\"fase\" value=4><br>");
+				out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+((Integer)vars.get("fase")-1)+"\">");
 				out.println("<input type=\"submit\" value=\"inicio\" onclick=\"form.consulta.value=0\">");
 				out.println("<input type=\"submit\" value=\"enviar\">");
 			}
@@ -131,15 +145,10 @@ public class Sint152P2 extends HttpServlet {
 				out.println("<h2>El número de canciones es: 4</h2>");
 				out.println("<form>");
 				out.println("<input type=\"hidden\" name=\"consulta\" value=2><br>");
+				out.println("<input type=\"hidden\" name=\"fase\" value=5><br>");
+				out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+((Integer)vars.get("fase")-1)+"\">");
 				out.println("<input type=\"submit\" value=\"inicio\" onclick=\"form.consulta.value=0\">");
 			}
-		}else if((Integer)vars.get("consulta")==0){
-			out.println("<h2>Selecciona una consulta:</h2>");
-			out.println("<form>");
-			out.println("<input type=\"radio\" name=\"consulta\" value=1 checked>Lista de canciones de un álbum<br>");
-			out.println("<input type=\"radio\" name=\"consulta\" value=2>Número de canciones de un álbum<br>");
-			out.println("<input type=\"hidden\" name=\"fase\" value=1><br>");
-			out.println("<input type=\"submit\" value=\"enviar\">");
 		}
 		out.println("</form>");
 	}
