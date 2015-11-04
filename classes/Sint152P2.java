@@ -21,7 +21,6 @@ public class Sint152P2 extends HttpServlet {
 		Enumeration params = req.getParameterNames();
 		while(params.hasMoreElements()){
 			String nextParam = (String) params.nextElement();
-			System.out.println(nextParam + Integer.parseInt(req.getParameter(nextParam)));
 			sesion.setAttribute(nextParam, req.getParameter(nextParam));
 		}
 	}
@@ -63,6 +62,7 @@ public class Sint152P2 extends HttpServlet {
 				out.println("<input type=\"radio\" name=\"interprete\" value=2>Intérprete 2<br>");
 				out.println("<input type=\"radio\" name=\"interprete\" value=3>Intérprete 3<br>");
 				out.println("<input type=\"radio\" name=\"interprete\" value=4>Intérprete 4<br>");
+				out.println("<input type=\"radio\" name=\"interprete\" value=todos>Todos<br>");
 				out.println("<input type=\"hidden\" name=\"consulta\" value=1><br>");
 				out.println("<input type=\"hidden\" name=\"fase\" value=2><br>");
 				out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+(fase-1)+"\">");
@@ -76,6 +76,7 @@ public class Sint152P2 extends HttpServlet {
 				out.println("<input type=\"radio\" name=\"album\" value=2>Álbum 2<br>");
 				out.println("<input type=\"radio\" name=\"album\" value=3>Álbum 3<br>");
 				out.println("<input type=\"radio\" name=\"album\" value=4>Álbum 4<br>");
+								out.println("<input type=\"radio\" name=\"album\" value=todos>Todos<br>");
 				out.println("<input type=\"hidden\" name=\"consulta\" value=1><br>");
 				out.println("<input type=\"hidden\" name=\"fase\" value=3><br>");
 				out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+(fase-1)+"\">");
@@ -103,6 +104,7 @@ public class Sint152P2 extends HttpServlet {
 				out.println("<input type=\"radio\" name=\"año\" value=2>Año 2<br>");
 				out.println("<input type=\"radio\" name=\"año\" value=3>Año 3<br>");
 				out.println("<input type=\"radio\" name=\"año\" value=4>Año 4<br>");
+				out.println("<input type=\"radio\" name=\"año\" value=todos>Todos<br>");
 				out.println("<input type=\"hidden\" name=\"consulta\" value=2><br>");
 				out.println("<input type=\"hidden\" name=\"fase\" value=2><br>");
 				out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+(fase-1)+"\">");
@@ -116,6 +118,7 @@ public class Sint152P2 extends HttpServlet {
 				out.println("<input type=\"radio\" name=\"album\" value=2>Álbum 2<br>");
 				out.println("<input type=\"radio\" name=\"album\" value=3>Álbum 3<br>");
 				out.println("<input type=\"radio\" name=\"album\" value=4>Álbum 4<br>");
+				out.println("<input type=\"radio\" name=\"album\" value=todos>Todos<br>");
 				out.println("<input type=\"hidden\" name=\"consulta\" value=2><br>");
 				out.println("<input type=\"hidden\" name=\"fase\" value=3><br>");
 				out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+(fase-1)+"\">");
@@ -130,6 +133,7 @@ public class Sint152P2 extends HttpServlet {
 				out.println("<input type=\"radio\" name=\"estilo\" value=2>Estilo 2<br>");
 				out.println("<input type=\"radio\" name=\"estilo\" value=3>Estilo 3<br>");
 				out.println("<input type=\"radio\" name=\"estilo\" value=4>Estilo 4<br>");
+				out.println("<input type=\"radio\" name=\"estilo\" value=todos>Todos<br>");
 				out.println("<input type=\"hidden\" name=\"consulta\" value=2><br>");
 				out.println("<input type=\"hidden\" name=\"fase\" value=4><br>");
 				out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+(fase-1)+"\">");
