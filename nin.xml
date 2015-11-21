@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='ISO-8859-15' standalone='no'?>
+<!DOCTYPE Interprete SYSTEM "/home/jacoboqc/public_html/webapps/WEB-INF/iml.dtd">
+<Interprete>
+	<Nombre>
+		<NombreG>Nine Inch Nails</NombreG>
+		<Id>iolfxnduwj</Id>
+	</Nombre>
+	<Nacionalidad>americano</Nacionalidad>
+	
+	<Album tipo="nuevo" temas="4">
+		<NombreA>The Fragile</NombreA>
+		<Año>1999</Año>
+		<Cancion estilo="rock">
+			<NombreT>We're in This Together</NombreT>
+			<Duracion>07:16</Duracion>
+		</Cancion>
+		<Cancion estilo="rock industrial">
+			<NombreT>Starfuckers, Inc</NombreT>
+			<Duracion>05:02</Duracion>
+		</Cancion>
+		<Cancion estilo="ambiental">
+			<NombreT>Into the Void</NombreT>
+			<Duracion>04:51</Duracion>
+		</Cancion>
+		<Cancion estilo="metal">
+			<NombreT>The Mark Has Been Made</NombreT>
+			<Duracion>05:17</Duracion>
+		</Cancion>
+	</Album>
+	
+	<Album tipo="recopilatorio" temas="3">
+		<NombreA>And All That Could Have Been</NombreA>
+		<Año>2002</Año>
+		<Cancion estilo="rock industrial">
+			<NombreT>Head Like a Hole</NombreT>
+			<Duracion>04:54</Duracion>
+		</Cancion>
+		<Cancion estilo="electronica">
+			<NombreT>Something I Can Never Have</NombreT>
+			<Duracion>06:39</Duracion>
+		</Cancion>
+		<Cancion estilo="metal industrial">
+			<NombreT>Wish</NombreT>
+			<Duracion>03:37</Duracion>
+		</Cancion>
+	</Album>
+	
+	<Album tipo="mixto" temas="2">
+		<NombreA>Welcome Oblivion</NombreA>
+		<Año>2013</Año>
+		<Cancion estilo="electronica">
+			<NombreT>And the Sky Began to Scream</NombreT>
+			<Duracion>03:57</Duracion>
+		</Cancion>
+		<Cancion estilo="electronica">
+			<NombreT>Strings and Attractors</NombreT>
+			<Duracion>04:28</Duracion>
+		</Cancion>
+	</Album>
+</Interprete>

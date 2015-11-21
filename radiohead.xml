@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='ISO-8859-15' standalone='no'?>
+<!DOCTYPE Interprete SYSTEM "/home/jacoboqc/public_html/webapps/WEB-INF/iml.dtd">
+<Interprete>
+	<Nombre>
+		<NombreG>Radiohead</NombreG>
+		<Id>jwbvowhtlc</Id>
+	</Nombre>
+	<Nacionalidad>americano</Nacionalidad>
+	
+	<Album tipo="nuevo" temas="5">
+		<NombreA>Amnesiac</NombreA>
+		<Año>2001</Año>
+		<Cancion estilo="electronica">
+			<NombreT>Packt like Sardines in a Crush Tin Box</NombreT>
+			I'm a miserable face
+			<Duracion>04:00</Duracion>
+		</Cancion>
+		<Cancion estilo="alt-rock">
+			<NombreT>You and Whose Army?</NombreT>
+			Overhead cables humming
+			<Duracion>03:07</Duracion>
+		</Cancion>
+		<Cancion estilo="art rock">
+			<NombreT>Knives Out</NombreT>
+			<Duracion>04:15</Duracion>
+			Store away from sunlight; preferably in a dark drawer with your secrets
+		</Cancion>
+		<Cancion estilo="post-rock">
+			Well of course I'd like to sit down and chat
+			<NombreT>Morning Bell/Amnesiac</NombreT>
+			<Duracion>03:14</Duracion>
+		</Cancion>
+		<Cancion estilo="jazz">
+			<NombreT>Like Spinning Plates</NombreT>
+			<Duracion>03:57</Duracion>
+		</Cancion>
+	</Album>
+	
+	<Album tipo="recopilatorio" temas="3">
+		<NombreA>I Might be Wrong: Live Recordings</NombreA>
+		<Año>2001</Año>
+		<Cancion estilo="alt-rock">
+			<NombreT>The National Anthem</NombreT>
+			<Duracion>04:55</Duracion>
+		</Cancion>
+		<Cancion estilo="electronica">
+			<NombreT>Idioteque</NombreT>
+			<Duracion>04:25</Duracion>
+		</Cancion>
+		<Cancion estilo="balada">
+			<NombreT>True Love Waits</NombreT>
+			<Duracion>04:15</Duracion>
+		</Cancion>
+	</Album>
+	
+	<Album tipo="nuevo" temas="4">
+		<NombreA>The Bends</NombreA>
+		<Año>1995</Año>
+		<Cancion estilo="balada">
+			<NombreT>Fake Plastic Trees</NombreT>
+			<Duracion>04:46</Duracion>
+		</Cancion>
+		<Cancion estilo="alt-rock">
+			<NombreT>Planet Telex</NombreT>
+			<Duracion>04:19</Duracion>
+		</Cancion>
+		<Cancion estilo="pop">
+			<NombreT>My Iron Lung</NombreT>
+			<Duracion>04:36</Duracion>
+		</Cancion>
+		<Cancion estilo="indie-pop">
+			<NombreT>Bullet Proof... I Wish I Was</NombreT>
+			<Duracion>03:29</Duracion>
+		</Cancion>
+	</Album>
+</Interprete>

@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='ISO-8859-15' standalone='no'?>
+<!DOCTYPE Interprete SYSTEM "/home/jacoboqc/public_html/webapps/WEB-INF/iml.dtd">
+<Interprete>
+	<Nombre>
+		<NombreG>Arcade Fire</NombreG>
+		<Id>eqaxyfblhi</Id>
+	</Nombre>
+	<Nacionalidad>americano</Nacionalidad>
+	
+	<Album tipo="nuevo" temas="5">
+		<NombreA>Neon Bible</NombreA>
+		<Año>2007</Año>
+		<Cancion estilo="indie-rock">
+			<NombreT>Black Mirror</NombreT>
+			<Duracion>04:11</Duracion>
+		</Cancion>
+		<Cancion estilo="pop barroco">
+			<NombreT>Keep the Car Running</NombreT>
+			<Duracion>03:29</Duracion>
+		</Cancion>
+		<Cancion estilo="post-rock">
+			<NombreT>Ocean of Noise</NombreT>
+			<Duracion>04:53</Duracion>
+		</Cancion>
+		<Cancion estilo="post-punk">
+			<NombreT>(Antichrist Television Blues)</NombreT>
+			<Duracion>05:07</Duracion>
+		</Cancion>
+		<Cancion estilo="indie-pop">
+			<NombreT>My Body Is a Cage</NombreT>
+			<Duracion>04:01</Duracion>
+		</Cancion>
+	</Album>
+	
+	<Album tipo="nuevo" temas="3">
+		<NombreA>The Suburbs</NombreA>
+		<Año>2010</Año>
+		<Cancion estilo="pop barroco">
+			<NombreT>Ready to Start</NombreT>
+			<Duracion>04:15</Duracion>
+		</Cancion>
+		<Cancion estilo="indie-pop">
+			<NombreT>Suburban War</NombreT>
+			<Duracion>04:41</Duracion>
+		</Cancion>
+		<Cancion estilo="post-punk">
+			<NombreT>Sprawl II (Mountains Beyond Mountains)</NombreT>
+			<Duracion>05:18</Duracion>
+		</Cancion>
+	</Album>
+	
+	<Album tipo="nuevo" temas="4">
+		<NombreA>Reflektor</NombreA>
+		<Año>2013</Año>
+		<Cancion estilo="indie-rock">
+			<NombreT>Reflektor</NombreT>
+			<Duracion>07:33</Duracion>
+		</Cancion>
+		<Cancion estilo="indie-rock">
+			<NombreT>Here Comes the Night Time</NombreT>
+			<Duracion>06:30</Duracion>
+		</Cancion>
+		<Cancion estilo="art rock">
+			<NombreT>Joan of Arc</NombreT>
+			<Duracion>05:26</Duracion>
+		</Cancion>
+		<Cancion estilo="post-rock">
+			<NombreT>Afterlife</NombreT>
+			<Duracion>05:52</Duracion>
+		</Cancion>
+	</Album>
+</Interprete>
