@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='ISO-8859-15' standalone='no'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE Interprete SYSTEM "/home/jacoboqc/public_html/webapps/WEB-INF/iml.dtd">
 <Interprete>
 	<Nombre>
@@ -71,6 +71,13 @@
 		<Cancion estilo="indie-pop">
 			<NombreT>Bullet Proof... I Wish I Was</NombreT>
 			<Duracion>03:29</Duracion>
+			<Version>
+				<Nombre>
+					<NombreG>Nine Inch Nails</NombreG>
+					<Id>iolfxnduwj</Id>
+				</Nombre>
+				<IML>nin.xml</IML>
+			</Version>
 		</Cancion>
 	</Album>
 </Interprete>

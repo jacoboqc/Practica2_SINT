@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='ISO-8859-15' standalone='no'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE Interprete SYSTEM "/home/jacoboqc/public_html/webapps/WEB-INF/iml.dtd">
 <Interprete>
 	<Nombre>
@@ -55,6 +55,13 @@
 		<Cancion estilo="electronica">
 			<NombreT>Strings and Attractors</NombreT>
 			<Duracion>04:28</Duracion>
+			<Version>
+				<Nombre>
+					<NombreG>Nine Inch Nails</NombreG>
+					<Id>eqaxyfblhi</Id>
+				</Nombre>
+				<IML>arcade.xml</IML>
+			</Version>
 		</Cancion>
 	</Album>
 </Interprete>
