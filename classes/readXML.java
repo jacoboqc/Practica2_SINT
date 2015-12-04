@@ -4,6 +4,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -20,10 +21,11 @@ public class readXML {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setValidating(true);
 		Document[] docs = parseXML(dbf);
-		XPath xpath= XPathFactory.newInstance().newXPath();
-		for(int i = 0; i<3; i++){
-			System.out.println(xpath.evaluate("/Interprete/Nombre/NombreG", docs[i].getDocumentElement()));
-		}
+		getInterpreters(docs);
+		getAlbums(docs);
+		getSongs(docs);
+		getYear(docs);
+		getStyle(docs);
 	}
 	
 	static Document[] parseXML (DocumentBuilderFactory dbf){
@@ -55,6 +57,57 @@ public class readXML {
 			i++;
 		}
 		return docs;
+	}
+	
+	static void getInterpreters(Document[] docs) throws XPathExpressionException{
+		XPath xpath= XPathFactory.newInstance().newXPath();
+		for(int i = 0; i<3; i++){
+			System.out.println(xpath.evaluate("/Interprete/Nombre/NombreG", docs[i].getDocumentElement()));
+		}
+	}
+	
+	static void getAlbums(Document[] docs) throws XPathExpressionException{
+		XPath xpath= XPathFactory.newInstance().newXPath();
+		for(int i = 0; i<3; i++){
+			NodeList node = (NodeList) xpath.evaluate("/Interprete/Album/NombreA", docs[i].getDocumentElement(), XPathConstants.NODESET);
+			for(int j = 0; j<node.getLength(); j++){
+				System.out.println(node.item(j).getTextContent());
+			}
+		}
+	}
+	
+	static void getSongs(Document[] docs) throws XPathExpressionException{
+		XPath xpath= XPathFactory.newInstance().newXPath();
+		for(int i = 0; i<3; i++){
+			NodeList node = (NodeList) xpath.evaluate("/Interprete/Album/Cancion", docs[i].getDocumentElement(), XPathConstants.NODESET);
+			for(int j = 0; j<node.getLength(); j++){
+				String nameSong = (String) xpath.evaluate("NombreT", node.item(j), XPathConstants.STRING);
+				String timeSong = (String) xpath.evaluate("Duracion", node.item(j), XPathConstants.STRING);
+				String description = ((String) xpath.evaluate("text()[normalize-space()]", node.item(j), XPathConstants.STRING)).trim(); 
+				System.out.println(nameSong + timeSong + description);
+			}
+		}
+	}
+	
+	static void getYear(Document[] docs) throws XPathExpressionException{
+		XPath xpath= XPathFactory.newInstance().newXPath();
+		for(int i = 0; i<3; i++){
+			NodeList node = (NodeList) xpath.evaluate("//Año", docs[i].getDocumentElement(), XPathConstants.NODESET);
+			for(int j = 0; j<node.getLength(); j++){
+				System.out.println(node.item(j).getTextContent());
+			}
+		}
+	}
+	
+	static void getStyle(Document[] docs) throws XPathExpressionException{
+		XPath xpath= XPathFactory.newInstance().newXPath();
+		for(int i = 0; i<3; i++){
+			NodeList node = (NodeList) xpath.evaluate("/Interprete/Album/Cancion", docs[i].getDocumentElement(), XPathConstants.NODESET);
+			for(int j = 0; j<node.getLength(); j++){
+				String nameStyle = (String) xpath.evaluate("@estilo", node.item(j), XPathConstants.STRING);
+				System.out.println(nameStyle);
+			}
+		}
 	}
 }
 
