@@ -20,20 +20,22 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 public class Sint152P2 extends HttpServlet {
-	public static Document docs[] = new Document[3];
+	public static ArrayList<Document> docs = new ArrayList<Document>();
+	public static XML_DTD_ErrorHandler eh = new XML_DTD_ErrorHandler();
 
 	public void init() throws ServletException {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setValidating(true);
 		Document doc = null;
 		String path = "/home/jacoboqc/public_html/webapps/WEB-INF/radiohead.xml";
-		String nextIML = "first";
-		int i = 0;
-		while(!nextIML.isEmpty()){
+		String nextIML = "";
+		ArrayList<String> imls = new ArrayList<String>();
+		imls.add(path);
+		for(int i = 0; i<imls.size(); i++){
 			try{
 				DocumentBuilder db = dbf.newDocumentBuilder();
-				db.setErrorHandler(new XML_DTD_ErrorHandler());
-				doc = db.parse(path);
+				db.setErrorHandler(eh);
+				doc = db.parse(imls.get(i));
 			}catch(ParserConfigurationException e){
 				e.printStackTrace();
 			}catch(SAXException e){
@@ -49,11 +51,15 @@ public class Sint152P2 extends HttpServlet {
 			}catch(XPathExpressionException e){
 				e.printStackTrace();
 			}
-			path = path.replaceFirst(new File(path).getName(), nextIML);
+			if(!nextIML.isEmpty()){
+				if(!nextIML.startsWith("/")){
+					path = path.replaceFirst(new File(path).getName(), nextIML);
+				}else path = nextIML;
+				if(!imls.contains(path)) imls.add(path);
+			}
 			System.out.println("El IML del siguiente elemento es: " + nextIML);
 			System.out.println("El path del siguiente elemento es: " + path);
-			docs[i] = doc;
-			i++;
+			docs.add(doc);
 		}
 	}
 	
@@ -88,6 +94,7 @@ public class Sint152P2 extends HttpServlet {
 		out.println("<body>");
 		out.println("<div align=\"center\">");
 		out.println("<h1>Servicio de consulta de información musical</h1>");
+		if(!eh.warning.isEmpty()) out.println(eh.warning);
 		printForm(out, sesion, consulta, fase);
 		out.println("<hr>");
 		out.println("Práctica de la asignatura Servicios de Internet - Curso 2015/16<br>");
@@ -112,7 +119,7 @@ public class Sint152P2 extends HttpServlet {
 				if(fase==1){
 					out.println("<h2>Selecciona un intérprete:</h2>");
 					out.println("<form>");
-					getInterpreters(docs, out);
+					getInterpreters(out);
 					out.println("<input type=\"hidden\" name=\"consulta\" value=1><br>");
 					out.println("<input type=\"hidden\" name=\"fase\" value=2><br>");
 					out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+(fase-1)+"\">");
@@ -123,7 +130,7 @@ public class Sint152P2 extends HttpServlet {
 					out.println("<h2>Selecciona un álbum:</h2>");
 					out.println("<h3>Intérprete: " + interprete + "</h3>");
 					out.println("<form>");
-					getAlbumsPerArtist(docs, out, interprete);
+					getAlbumsPerArtist(out, interprete);
 					out.println("<input type=\"hidden\" name=\"consulta\" value=1><br>");
 					out.println("<input type=\"hidden\" name=\"fase\" value=3><br>");
 					out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+(fase-1)+"\">");
@@ -136,7 +143,7 @@ public class Sint152P2 extends HttpServlet {
 					out.println("<h2>Listado de canciones especificadas:</h2>");
 					out.println("<h3>Intérprete: " + interprete + " - Álbum: " + album + "</h3>");
 					out.println("<form>");
-					getSongs(docs, out, album);
+					getSongs(out, album);
 					out.println("<input type=\"hidden\" name=\"consulta\" value=1><br>");
 					out.println("<input type=\"hidden\" name=\"fase\" value=4><br>");
 					out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+(fase-1)+"\">");
@@ -146,7 +153,7 @@ public class Sint152P2 extends HttpServlet {
 				if(fase==1){
 					out.println("<h2>Selecciona un año:</h2>");
 					out.println("<form>");
-					getYears(docs, out);
+					getYears(out);
 					out.println("<input type=\"hidden\" name=\"consulta\" value=2><br>");
 					out.println("<input type=\"hidden\" name=\"fase\" value=2><br>");
 					out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+(fase-1)+"\">");
@@ -157,7 +164,7 @@ public class Sint152P2 extends HttpServlet {
 					out.println("<h2>Selecciona un álbum:</h2>");
 					out.println("<h3>Año: " + year + "</h3>");
 					out.println("<form>");
-					getAlbumsPerYear(docs, out, year);
+					getAlbumsPerYear(out, year);
 					out.println("<input type=\"hidden\" name=\"consulta\" value=2><br>");
 					out.println("<input type=\"hidden\" name=\"fase\" value=3><br>");
 					out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+(fase-1)+"\">");
@@ -170,7 +177,7 @@ public class Sint152P2 extends HttpServlet {
 					out.println("<h2>Selecciona un estilo:</h2>");
 					out.println("<h3>Año: " + año + " - Álbum: " + album + "</h3>");
 					out.println("<form>");
-					getStyle(docs, out, album);
+					getStyle(out, album);
 					out.println("<input type=\"hidden\" name=\"consulta\" value=2><br>");
 					out.println("<input type=\"hidden\" name=\"fase\" value=4><br>");
 					out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+(fase-1)+"\">");
@@ -181,7 +188,7 @@ public class Sint152P2 extends HttpServlet {
 					String año = sesion.getAttribute("año").toString();
 					String album = sesion.getAttribute("album").toString().replace("+", " ");
 					String estilo = sesion.getAttribute("estilo").toString().replace("+", " ");
-					getNumber(docs, out, album, estilo);
+					getNumber(out, album, estilo);
 					out.println("<h3>Año: " + año + " - Álbum: " + album + " - Estilo: " + estilo + "</h3>");
 					out.println("<form>");
 					out.println("<input type=\"hidden\" name=\"consulta\" value=2><br>");
@@ -197,11 +204,11 @@ public class Sint152P2 extends HttpServlet {
 	}
 	
 	//LISTO
-	void getInterpreters(Document[] docs, PrintWriter out) throws XPathExpressionException{
+	void getInterpreters(PrintWriter out) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		ArrayList<String> interpreters = new ArrayList<String>();
-		for(int i = 0; i<3; i++){
-			interpreters.add((String) xpath.evaluate("//NombreG | //NombreC", docs[i].getDocumentElement(), XPathConstants.STRING));
+		for(int i = 0; i<docs.size(); i++){
+			interpreters.add((String) xpath.evaluate("//NombreG | //NombreC", docs.get(i).getDocumentElement(), XPathConstants.STRING));
 		}
 		Collections.sort(interpreters);
 		Iterator it = interpreters.iterator();
@@ -215,12 +222,12 @@ public class Sint152P2 extends HttpServlet {
 	}
 	
 	//LISTO
-	void getAlbumsPerArtist(Document[] docs, PrintWriter out, String artist) throws XPathExpressionException{
+	void getAlbumsPerArtist(PrintWriter out, String artist) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		Map<Integer, List<String>> albums = new TreeMap<Integer, List<String>>();
 		String expression = "//Nombre[NombreG=\"" + artist + "\"]/../Album";
-		for(int i = 0; i<3; i++){
-			NodeList node = (NodeList) xpath.evaluate(expression, docs[i].getDocumentElement(), XPathConstants.NODESET);
+		for(int i = 0; i<docs.size(); i++){
+			NodeList node = (NodeList) xpath.evaluate(expression, docs.get(i).getDocumentElement(), XPathConstants.NODESET);
 			for(int j = 0; j<node.getLength(); j++){
 				String album = (String) xpath.evaluate("NombreA", node.item(j), XPathConstants.STRING);
 				String year = (String) xpath.evaluate("Año", node.item(j), XPathConstants.STRING);
@@ -245,13 +252,13 @@ public class Sint152P2 extends HttpServlet {
 	}
 	
 	//LISTO
-	void getSongs(Document[] docs, PrintWriter out, String album) throws XPathExpressionException{
+	void getSongs(PrintWriter out, String album) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		ArrayList<String> songs = new ArrayList<String>();
 		String expression = "//Album[NombreA=\"" + album + "\"]/Cancion";
 		String str;
-		for(int i = 0; i<3; i++){
-			NodeList node = (NodeList) xpath.evaluate(expression, docs[i].getDocumentElement(), XPathConstants.NODESET);
+		for(int i = 0; i<docs.size(); i++){
+			NodeList node = (NodeList) xpath.evaluate(expression, docs.get(i).getDocumentElement(), XPathConstants.NODESET);
 			for(int j = 0; j<node.getLength(); j++){
 				String nameSong = (String) xpath.evaluate("NombreT", node.item(j), XPathConstants.STRING);
 				String timeSong = (String) xpath.evaluate("Duracion", node.item(j), XPathConstants.STRING);
@@ -270,11 +277,11 @@ public class Sint152P2 extends HttpServlet {
 	}
 	
 	//LISTO
-	void getYears(Document[] docs, PrintWriter out) throws XPathExpressionException{
+	void getYears(PrintWriter out) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		ArrayList<Integer> years = new ArrayList<Integer>();
-		for(int i = 0; i<3; i++){
-			NodeList node = (NodeList) xpath.evaluate("//Año", docs[i].getDocumentElement(), XPathConstants.NODESET);
+		for(int i = 0; i<docs.size(); i++){
+			NodeList node = (NodeList) xpath.evaluate("//Año", docs.get(i).getDocumentElement(), XPathConstants.NODESET);
 			for(int j = 0; j<node.getLength(); j++){
 				Integer year = Integer.parseInt(node.item(j).getTextContent());
 				if(!years.contains(year)){
@@ -294,12 +301,12 @@ public class Sint152P2 extends HttpServlet {
 	}
 	
 	//LISTO
-	void getAlbumsPerYear(Document[] docs, PrintWriter out, String año) throws XPathExpressionException{
+	void getAlbumsPerYear(PrintWriter out, String año) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		Map<Integer, List<String>> albums = new TreeMap<Integer, List<String>>();
 		String expression = "//Album[Año=\"" + año + "\"]";
-		for(int i = 0; i<3; i++){
-			NodeList node = (NodeList) xpath.evaluate(expression, docs[i].getDocumentElement(), XPathConstants.NODESET);
+		for(int i = 0; i<docs.size(); i++){
+			NodeList node = (NodeList) xpath.evaluate(expression, docs.get(i).getDocumentElement(), XPathConstants.NODESET);
 			for(int j = 0; j<node.getLength(); j++){
 				String album = (String) xpath.evaluate("NombreA", node.item(j), XPathConstants.STRING);
 				String year = (String) xpath.evaluate("Año", node.item(j), XPathConstants.STRING);
@@ -324,11 +331,11 @@ public class Sint152P2 extends HttpServlet {
 	}
 	
 	//LISTO
-	void getStyle(Document[] docs, PrintWriter out, String album) throws XPathExpressionException{
+	void getStyle(PrintWriter out, String album) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		ArrayList<String> styles = new ArrayList<String>();
-		for(int i = 0; i<3; i++){
-			NodeList node = (NodeList) xpath.evaluate("//Album[NombreA=\"" + album + "\"]/Cancion", docs[i].getDocumentElement(), XPathConstants.NODESET);
+		for(int i = 0; i<docs.size(); i++){
+			NodeList node = (NodeList) xpath.evaluate("//Album[NombreA=\"" + album + "\"]/Cancion", docs.get(i).getDocumentElement(), XPathConstants.NODESET);
 			for(int j = 0; j<node.getLength(); j++){
 				String style = (String) xpath.evaluate("@estilo", node.item(j), XPathConstants.STRING);
 				if(!styles.contains(style)){
@@ -346,13 +353,13 @@ public class Sint152P2 extends HttpServlet {
 		out.println("<input type=\"radio\" name=\"estilo\" value=todos>Todos<br>");
 	}
 	
-	//ALGUNOS NODOS DEVUELVEN CERO
-	void getNumber(Document[] docs, PrintWriter out, String album, String style) throws XPathExpressionException{
+	//LISTO	
+	void getNumber(PrintWriter out, String album, String style) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		NodeList node = null;
 		int num = 0;
-		for(int i = 0; i<3; i++){
-			node = (NodeList) xpath.evaluate("//Album[NombreA=\"" + album + "\"]/Cancion[@estilo=\"" + style + "\"]", docs[i].getDocumentElement(), XPathConstants.NODESET);
+		for(int i = 0; i<docs.size(); i++){
+			node = (NodeList) xpath.evaluate("//Album[NombreA=\"" + album + "\"]/Cancion[@estilo=\"" + style + "\"]", docs.get(i).getDocumentElement(), XPathConstants.NODESET);
 			if(node.getLength()!=0) num = node.getLength();
 		}
 		out.println("<h2>El número de canciones es: " + num + "</h2>");
@@ -361,14 +368,15 @@ public class Sint152P2 extends HttpServlet {
 }
 
 class XML_DTD_ErrorHandler extends DefaultHandler {
+	public static String warning = ""; 
 	public XML_DTD_ErrorHandler () {}
 	public void warning(SAXParseException spe) {
-		System.out.println("Warning: "+spe.toString());
+		warning = "Warning: "+spe.toString();
 	}
 	public void error(SAXParseException spe) {
-		System.out.println("Error: "+spe.toString());
+		warning = "Error: "+spe.toString();
 	}
 	public void fatalerror(SAXParseException spe) {
-		System.out.println("Fatal Error: "+spe.toString());
+		warning = "Fatal Error: "+spe.toString();
 	}
 }
