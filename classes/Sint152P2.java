@@ -293,7 +293,7 @@ public class Sint152P2 extends HttpServlet {
 		out.println("<input type=\"radio\" name=\"año\" value=todos>Todos<br>");
 	}
 	
-	//EL MAPA DE LOS ALBUMES NO ADMITE ALBUMES DEL MISMO AÑO
+	//LISTO
 	void getAlbumsPerYear(Document[] docs, PrintWriter out, String año) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		Map<Integer, List<String>> albums = new TreeMap<Integer, List<String>>();
@@ -350,10 +350,12 @@ public class Sint152P2 extends HttpServlet {
 	void getNumber(Document[] docs, PrintWriter out, String album, String style) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		NodeList node = null;
+		int num = 0;
 		for(int i = 0; i<3; i++){
 			node = (NodeList) xpath.evaluate("//Album[NombreA=\"" + album + "\"]/Cancion[@estilo=\"" + style + "\"]", docs[i].getDocumentElement(), XPathConstants.NODESET);
+			if(node.getLength()!=0) num = node.getLength();
 		}
-		out.println("<h2>El número de canciones es: " + node.getLength() + "</h2>");
+		out.println("<h2>El número de canciones es: " + num + "</h2>");
 	}
 	
 }
