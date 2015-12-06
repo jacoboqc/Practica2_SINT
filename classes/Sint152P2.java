@@ -214,25 +214,32 @@ public class Sint152P2 extends HttpServlet {
 		out.println("<input type=\"radio\" name=\"interprete\" value=Todos>Todos<br>");
 	}
 	
-	//EL MAPA DE LOS ALBUMES NO ADMITE ALBUMES DEL MISMO AÑO
+	//LISTO
 	void getAlbumsPerArtist(Document[] docs, PrintWriter out, String artist) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
-		Map<Integer, String> albums = new TreeMap<Integer, String>();
+		Map<Integer, List<String>> albums = new TreeMap<Integer, List<String>>();
 		String expression = "//Nombre[NombreG=\"" + artist + "\"]/../Album";
 		for(int i = 0; i<3; i++){
 			NodeList node = (NodeList) xpath.evaluate(expression, docs[i].getDocumentElement(), XPathConstants.NODESET);
 			for(int j = 0; j<node.getLength(); j++){
 				String album = (String) xpath.evaluate("NombreA", node.item(j), XPathConstants.STRING);
 				String year = (String) xpath.evaluate("Año", node.item(j), XPathConstants.STRING);
-				albums.put(Integer.parseInt(year), album);
+				List<String> sameYear = albums.get(Integer.parseInt(year));
+				if(sameYear == null) sameYear = new ArrayList<String>();
+				sameYear.add(album);
+				albums.put(Integer.parseInt(year), sameYear);
 			}
 		}
 		Iterator it = albums.keySet().iterator();
 		String checked = " checked";
 		while(it.hasNext()){
-			String album = albums.get(it.next());
-			out.println("<input type=\"radio\" name=\"album\" value=" + album.replace(" ", "+") + checked + ">" + album + "<br>");
-			checked = "";
+			List<String> sameYear = albums.get(it.next());
+			ListIterator<String> listIt = sameYear.listIterator();
+			while(listIt.hasNext()){
+				String album = listIt.next();
+				out.println("<input type=\"radio\" name=\"album\" value=" + album.replace(" ", "+") + checked + ">" + album + "<br>");
+				checked = "";
+			}
 		}
 		out.println("<input type=\"radio\" name=\"album\" value=todos>Todos<br>");
 	}
@@ -289,22 +296,29 @@ public class Sint152P2 extends HttpServlet {
 	//EL MAPA DE LOS ALBUMES NO ADMITE ALBUMES DEL MISMO AÑO
 	void getAlbumsPerYear(Document[] docs, PrintWriter out, String año) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
-		Map<Integer, String> albums = new TreeMap<Integer, String>();
+		Map<Integer, List<String>> albums = new TreeMap<Integer, List<String>>();
 		String expression = "//Album[Año=\"" + año + "\"]";
 		for(int i = 0; i<3; i++){
 			NodeList node = (NodeList) xpath.evaluate(expression, docs[i].getDocumentElement(), XPathConstants.NODESET);
 			for(int j = 0; j<node.getLength(); j++){
 				String album = (String) xpath.evaluate("NombreA", node.item(j), XPathConstants.STRING);
 				String year = (String) xpath.evaluate("Año", node.item(j), XPathConstants.STRING);
-				albums.put(Integer.parseInt(year), album);
+				List<String> sameYear = albums.get(Integer.parseInt(year));
+				if(sameYear == null) sameYear = new ArrayList<String>();
+				sameYear.add(album);
+				albums.put(Integer.parseInt(year), sameYear);				
 			}
 		}
 		Iterator it = albums.keySet().iterator();
 		String checked = " checked";
 		while(it.hasNext()){
-			String album = albums.get(it.next());
-			out.println("<input type=\"radio\" name=\"album\" value=" + album.replace(" ", "+") + checked + ">" + album + "<br>");
-			checked = "";
+			List<String> sameYear = albums.get(it.next());
+			ListIterator<String> listIt = sameYear.listIterator();
+			while(listIt.hasNext()){
+				String album = listIt.next();
+				out.println("<input type=\"radio\" name=\"album\" value=" + album.replace(" ", "+") + checked + ">" + album + "<br>");
+				checked = "";
+			}
 		}
 		out.println("<input type=\"radio\" name=\"album\" value=todos>Todos<br>");
 	}
@@ -332,7 +346,7 @@ public class Sint152P2 extends HttpServlet {
 		out.println("<input type=\"radio\" name=\"estilo\" value=todos>Todos<br>");
 	}
 	
-	//LISTO
+	//ALGUNOS NODOS DEVUELVEN CERO
 	void getNumber(Document[] docs, PrintWriter out, String album, String style) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		NodeList node = null;
