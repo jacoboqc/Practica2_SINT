@@ -143,7 +143,7 @@ public class Sint152P2 extends HttpServlet {
 					out.println("<h2>Listado de canciones especificadas:</h2>");
 					out.println("<h3>Intérprete: " + interprete + " - Álbum: " + album + "</h3>");
 					out.println("<form>");
-					getSongs(out, album);
+					getSongs(out, interprete, album);
 					out.println("<input type=\"hidden\" name=\"consulta\" value=1><br>");
 					out.println("<input type=\"hidden\" name=\"fase\" value=4><br>");
 					out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+(fase-1)+"\">");
@@ -160,11 +160,11 @@ public class Sint152P2 extends HttpServlet {
 					out.println("<input type=\"submit\" value=\"enviar\">");
 				}
 				if(fase==2){
-					String year = sesion.getAttribute("año").toString();
+					String año = sesion.getAttribute("año").toString();
 					out.println("<h2>Selecciona un álbum:</h2>");
-					out.println("<h3>Año: " + year + "</h3>");
+					out.println("<h3>Año: " + año + "</h3>");
 					out.println("<form>");
-					getAlbumsPerYear(out, year);
+					getAlbumsPerYear(out, año);
 					out.println("<input type=\"hidden\" name=\"consulta\" value=2><br>");
 					out.println("<input type=\"hidden\" name=\"fase\" value=3><br>");
 					out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+(fase-1)+"\">");
@@ -177,7 +177,7 @@ public class Sint152P2 extends HttpServlet {
 					out.println("<h2>Selecciona un estilo:</h2>");
 					out.println("<h3>Año: " + año + " - Álbum: " + album + "</h3>");
 					out.println("<form>");
-					getStyle(out, album);
+					getStyle(out, año, album);
 					out.println("<input type=\"hidden\" name=\"consulta\" value=2><br>");
 					out.println("<input type=\"hidden\" name=\"fase\" value=4><br>");
 					out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+(fase-1)+"\">");
@@ -188,7 +188,7 @@ public class Sint152P2 extends HttpServlet {
 					String año = sesion.getAttribute("año").toString();
 					String album = sesion.getAttribute("album").toString().replace("+", " ");
 					String estilo = sesion.getAttribute("estilo").toString().replace("+", " ");
-					getNumber(out, album, estilo);
+					getNumber(out, año, album, estilo);
 					out.println("<h3>Año: " + año + " - Álbum: " + album + " - Estilo: " + estilo + "</h3>");
 					out.println("<form>");
 					out.println("<input type=\"hidden\" name=\"consulta\" value=2><br>");
@@ -225,7 +225,9 @@ public class Sint152P2 extends HttpServlet {
 	void getAlbumsPerArtist(PrintWriter out, String artist) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		Map<Integer, List<String>> albums = new TreeMap<Integer, List<String>>();
-		String expression = "//Nombre[NombreG=\"" + artist + "\"]/../Album";
+		String expression = "";
+		if(artist.equals("Todos")) expression = "//Album";
+		else expression = "//Nombre[NombreG=\"" + artist + "\"]/../Album";
 		for(int i = 0; i<docs.size(); i++){
 			NodeList node = (NodeList) xpath.evaluate(expression, docs.get(i).getDocumentElement(), XPathConstants.NODESET);
 			for(int j = 0; j<node.getLength(); j++){
@@ -248,14 +250,18 @@ public class Sint152P2 extends HttpServlet {
 				checked = "";
 			}
 		}
-		out.println("<input type=\"radio\" name=\"album\" value=todos>Todos<br>");
+		out.println("<input type=\"radio\" name=\"album\" value=Todos>Todos<br>");
 	}
 	
 	//LISTO
-	void getSongs(PrintWriter out, String album) throws XPathExpressionException{
+	void getSongs(PrintWriter out, String artist, String album) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		ArrayList<String> songs = new ArrayList<String>();
-		String expression = "//Album[NombreA=\"" + album + "\"]/Cancion";
+		String expression = "";
+		if(album.equals("Todos")){
+			if(artist.equals("Todos")) expression = "//Cancion";
+			else expression = "//Nombre[NombreG=\"" + artist + "\"]/..//Cancion";
+		}else expression = "//Album[NombreA=\"" + album + "\"]/Cancion";
 		String str;
 		for(int i = 0; i<docs.size(); i++){
 			NodeList node = (NodeList) xpath.evaluate(expression, docs.get(i).getDocumentElement(), XPathConstants.NODESET);
@@ -297,14 +303,16 @@ public class Sint152P2 extends HttpServlet {
 			out.println("<input type=\"radio\" name=\"año\" value=" + year + checked + ">" + year + "<br>");
 			checked = "";
 		}
-		out.println("<input type=\"radio\" name=\"año\" value=todos>Todos<br>");
+		out.println("<input type=\"radio\" name=\"año\" value=Todos>Todos<br>");
 	}
 	
 	//LISTO
 	void getAlbumsPerYear(PrintWriter out, String año) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		Map<Integer, List<String>> albums = new TreeMap<Integer, List<String>>();
-		String expression = "//Album[Año=\"" + año + "\"]";
+		String expression = "";
+		if(año.equals("Todos")) expression = "//Album";
+		else expression = "//Album[Año=\"" + año + "\"]";
 		for(int i = 0; i<docs.size(); i++){
 			NodeList node = (NodeList) xpath.evaluate(expression, docs.get(i).getDocumentElement(), XPathConstants.NODESET);
 			for(int j = 0; j<node.getLength(); j++){
@@ -327,15 +335,20 @@ public class Sint152P2 extends HttpServlet {
 				checked = "";
 			}
 		}
-		out.println("<input type=\"radio\" name=\"album\" value=todos>Todos<br>");
+		out.println("<input type=\"radio\" name=\"album\" value=Todos>Todos<br>");
 	}
 	
 	//LISTO
-	void getStyle(PrintWriter out, String album) throws XPathExpressionException{
+	void getStyle(PrintWriter out, String año, String album) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		ArrayList<String> styles = new ArrayList<String>();
+		String expression = "";
+		if(album.equals("Todos")){
+			if(año.equals("Todos")) expression = "//Cancion";
+			else expression = "//Album[Año=\"" + año + "\"]/Cancion";
+		}else expression = "//Album[NombreA=\"" + album + "\"]/Cancion";	
 		for(int i = 0; i<docs.size(); i++){
-			NodeList node = (NodeList) xpath.evaluate("//Album[NombreA=\"" + album + "\"]/Cancion", docs.get(i).getDocumentElement(), XPathConstants.NODESET);
+			NodeList node = (NodeList) xpath.evaluate(expression, docs.get(i).getDocumentElement(), XPathConstants.NODESET);
 			for(int j = 0; j<node.getLength(); j++){
 				String style = (String) xpath.evaluate("@estilo", node.item(j), XPathConstants.STRING);
 				if(!styles.contains(style)){
@@ -350,16 +363,22 @@ public class Sint152P2 extends HttpServlet {
 			out.println("<input type=\"radio\" name=\"estilo\" value=" + style.replace(" ", "+") + checked + ">" + style + "<br>");
 			checked = "";
 		}
-		out.println("<input type=\"radio\" name=\"estilo\" value=todos>Todos<br>");
+		out.println("<input type=\"radio\" name=\"estilo\" value=Todos>Todos<br>");
 	}
 	
 	//LISTO	
-	void getNumber(PrintWriter out, String album, String style) throws XPathExpressionException{
+	void getNumber(PrintWriter out, String año, String album, String style) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
+		String expression = "";
+		if(style.equals("Todos")){
+			if(album.equals("Todos")){
+				expression = "//Cancion";
+			}else expression = "//Album[NombreA\"" + album + "\"]/Cancion";
+		}else expression = "//Album[NombreA=\"" + album + "\"]/Cancion[@estilo=\"" + style + "\"]";
 		NodeList node = null;
 		int num = 0;
 		for(int i = 0; i<docs.size(); i++){
-			node = (NodeList) xpath.evaluate("//Album[NombreA=\"" + album + "\"]/Cancion[@estilo=\"" + style + "\"]", docs.get(i).getDocumentElement(), XPathConstants.NODESET);
+			node = (NodeList) xpath.evaluate(expression, docs.get(i).getDocumentElement(), XPathConstants.NODESET);
 			if(node.getLength()!=0) num = node.getLength();
 		}
 		out.println("<h2>El número de canciones es: " + num + "</h2>");
