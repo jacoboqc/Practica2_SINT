@@ -10,6 +10,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import java.net.URL;
+
 import java.io.*;
 
 import java.util.*;
@@ -22,13 +24,13 @@ import javax.servlet.http.*;
 public class Sint152P2 extends HttpServlet {
 	public static ArrayList<Document> docs = new ArrayList<Document>();
 	public static ArrayList<String> errors = new ArrayList<String>();
-	public static XML_DTD_ErrorHandler eh = new XML_DTD_ErrorHandler();
 
 	public void init() throws ServletException {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setValidating(true);
 		Document doc = null;
-		String path = "/home/jacoboqc/public_html/webapps/WEB-INF/radiohead.xml"/*"http://clave.det.uvigo.es:8080/~sint152/webapps/WEB-INF/radiohead.xml"*/;
+		String path = "/home/jacoboqc/Descargas/sabina.xml";
+		//String path = "http://clave.det.uvigo.es:8080/~sint152/webapps/WEB-INF/radiohead.xml";
 		String relative = path.replaceFirst(new File(path).getName(), "");
 		NodeList nextIMLs = null;
 		String nextIML = "";
@@ -37,11 +39,11 @@ public class Sint152P2 extends HttpServlet {
 		for(int i = 0; i<imls.size(); i++){
 			try{
 				DocumentBuilder db = dbf.newDocumentBuilder();
-				db.setErrorHandler(eh);
+				db.setErrorHandler(new XML_DTD_ErrorHandler());
 				doc = db.parse(imls.get(i));
+				//doc = db.parse(new URL(imls.get(i)).openStream(), "http://localhost:8152/sint152/");
 				XPath xpath= XPathFactory.newInstance().newXPath();
 				Element raiz = doc.getDocumentElement();
-				//System.out.println("El nombre del elemento actual es: " + xpath.evaluate("//NombreG | //NombreC", raiz));
 				nextIMLs = (NodeList) xpath.evaluate("//IML", raiz, XPathConstants.NODESET);
 				for(int j = 0; j<nextIMLs.getLength(); j++){
 					nextIML = nextIMLs.item(j).getTextContent();
@@ -50,8 +52,6 @@ public class Sint152P2 extends HttpServlet {
 					}else path = nextIML;
 					if(!imls.contains(path)) imls.add(path);
 				}
-				//System.out.println("El IML del siguiente elemento es: " + nextIML);
-				//System.out.println("El path del siguiente elemento es: " + path);
 				docs.add(doc);
 			}catch(XPathExpressionException e){
 				errors.add("En " + path + ": " + e.getMessage());
