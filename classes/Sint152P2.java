@@ -112,6 +112,7 @@ public class Sint152P2 extends HttpServlet {
 	}
 
 	void printForm(PrintWriter out, HttpSession sesion, int consulta, int fase){
+		boolean flag;
 		try{
 			if(consulta==0 || fase==0){
 				if(!errors.isEmpty()){
@@ -122,7 +123,7 @@ public class Sint152P2 extends HttpServlet {
 						out.println(it.next() + "<br>");
 					}
 					if(docs.size()==0) out.println("No se ha podido parsear ningún fichero<br>");
-					else out.println("Sólo se han podido parsear " + docs.size() + " ficheros<br>");
+					else out.println("Sólo se han podido parsear " + docs.size() + " fichero(s)<br>");
 					out.println("</div>");
 				}
 				if(!docs.isEmpty()){
@@ -137,23 +138,23 @@ public class Sint152P2 extends HttpServlet {
 				if(fase==1){
 					out.println("<h2>Selecciona un intérprete:</h2>");
 					out.println("<form>");
-					getInterpreters(out);
+					flag = getInterpreters(out);
 					out.println("<input type=\"hidden\" name=\"consulta\" value=1><br>");
 					out.println("<input type=\"hidden\" name=\"fase\" value=2><br>");
 					out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+(fase-1)+"\">");
-					out.println("<input type=\"submit\" value=\"enviar\">");
+					if(flag) out.println("<input type=\"submit\" value=\"enviar\">");
 				}
 				if(fase==2){
 					String interprete = sesion.getAttribute("interprete").toString().replace("+", " ");
 					out.println("<h2>Selecciona un álbum:</h2>");
 					out.println("<h3>Intérprete: " + interprete + "</h3>");
 					out.println("<form>");
-					getAlbumsPerArtist(out, interprete);
+					flag = getAlbumsPerArtist(out, interprete);
 					out.println("<input type=\"hidden\" name=\"consulta\" value=1><br>");
 					out.println("<input type=\"hidden\" name=\"fase\" value=3><br>");
 					out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+(fase-1)+"\">");
 					out.println("<input type=\"submit\" value=\"inicio\" onclick=\"form.consulta.value=0\">");
-					out.println("<input type=\"submit\" value=\"enviar\">");
+					if(flag) out.println("<input type=\"submit\" value=\"enviar\">");
 				}
 				if(fase==3){
 					String interprete = sesion.getAttribute("interprete").toString().replace("+", " ");
@@ -171,23 +172,23 @@ public class Sint152P2 extends HttpServlet {
 				if(fase==1){
 					out.println("<h2>Selecciona un año:</h2>");
 					out.println("<form>");
-					getYears(out);
+					flag = getYears(out);
 					out.println("<input type=\"hidden\" name=\"consulta\" value=2><br>");
 					out.println("<input type=\"hidden\" name=\"fase\" value=2><br>");
 					out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+(fase-1)+"\">");
-					out.println("<input type=\"submit\" value=\"enviar\">");
+					if(flag) out.println("<input type=\"submit\" value=\"enviar\">");
 				}
 				if(fase==2){
 					String año = sesion.getAttribute("año").toString();
 					out.println("<h2>Selecciona un álbum:</h2>");
 					out.println("<h3>Año: " + año + "</h3>");
 					out.println("<form>");
-					getAlbumsPerYear(out, año);
+					flag = getAlbumsPerYear(out, año);
 					out.println("<input type=\"hidden\" name=\"consulta\" value=2><br>");
 					out.println("<input type=\"hidden\" name=\"fase\" value=3><br>");
 					out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+(fase-1)+"\">");
 					out.println("<input type=\"submit\" value=\"inicio\" onclick=\"form.consulta.value=0\">");
-					out.println("<input type=\"submit\" value=\"enviar\">");
+					if(flag) out.println("<input type=\"submit\" value=\"enviar\">");
 				}
 				if(fase==3){
 					String año = sesion.getAttribute("año").toString();
@@ -195,12 +196,12 @@ public class Sint152P2 extends HttpServlet {
 					out.println("<h2>Selecciona un estilo:</h2>");
 					out.println("<h3>Año: " + año + " - Álbum: " + album + "</h3>");
 					out.println("<form>");
-					getStyle(out, año, album);
+					flag = getStyle(out, año, album);
 					out.println("<input type=\"hidden\" name=\"consulta\" value=2><br>");
 					out.println("<input type=\"hidden\" name=\"fase\" value=4><br>");
 					out.println("<input type=\"submit\" value=\"atrás\" onclick=\"form.fase.value="+(fase-1)+"\">");
 					out.println("<input type=\"submit\" value=\"inicio\" onclick=\"form.consulta.value=0\">");
-					out.println("<input type=\"submit\" value=\"enviar\">");
+					if(flag) out.println("<input type=\"submit\" value=\"enviar\">");
 				}
 				if(fase==4){
 					String año = sesion.getAttribute("año").toString();
@@ -221,7 +222,7 @@ public class Sint152P2 extends HttpServlet {
 		}
 	}
 	
-	void getInterpreters(PrintWriter out) throws XPathExpressionException{
+	boolean getInterpreters(PrintWriter out) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		ArrayList<String> interpreters = new ArrayList<String>();
 		for(int i = 0; i<docs.size(); i++){
@@ -235,10 +236,16 @@ public class Sint152P2 extends HttpServlet {
 			out.println("<input type=\"radio\" name=\"interprete\" value=" + interpreter.replace(" ", "+") + checked + ">" + interpreter + "<br>");
 			checked = "";
 		}
-		out.println("<input type=\"radio\" name=\"interprete\" value=Todos>Todos<br>");
+		if(interpreters.size()!=0){
+			out.println("<input type=\"radio\" name=\"interprete\" value=Todos>Todos<br>");
+			return true;
+		}else{
+			out.println("<strong>Ups! Tu consulta no ha devuelto ningún resultado</strong><br>");
+			return false;
+		}			
 	}
 	
-	void getAlbumsPerArtist(PrintWriter out, String artist) throws XPathExpressionException{
+	boolean getAlbumsPerArtist(PrintWriter out, String artist) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		Map<Integer, List<String>> albums = new TreeMap<Integer, List<String>>();
 		String expression = "";
@@ -266,7 +273,13 @@ public class Sint152P2 extends HttpServlet {
 				checked = "";
 			}
 		}
-		out.println("<input type=\"radio\" name=\"album\" value=Todos>Todos<br>");
+		if(albums.size()!=0){
+			out.println("<input type=\"radio\" name=\"album\" value=Todos>Todos<br>");
+			return true;
+		}else{
+			out.println("<strong>Ups! Tu consulta no ha devuelto ningún resultado</strong><br>");
+			return false;
+		}
 	}
 	
 	void getSongs(PrintWriter out, String artist, String album) throws XPathExpressionException{
@@ -293,11 +306,11 @@ public class Sint152P2 extends HttpServlet {
 		}
 		Iterator it = songs.iterator();
 		while(it.hasNext()){
-			out.println("<li>" + it.next() + "<l/i>");
+			out.println("<li>" + it.next() + "</li>");
 		}
 	}
 	
-	void getYears(PrintWriter out) throws XPathExpressionException{
+	boolean getYears(PrintWriter out) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		ArrayList<Integer> years = new ArrayList<Integer>();
 		for(int i = 0; i<docs.size(); i++){
@@ -317,10 +330,16 @@ public class Sint152P2 extends HttpServlet {
 			out.println("<input type=\"radio\" name=\"año\" value=" + year + checked + ">" + year + "<br>");
 			checked = "";
 		}
-		out.println("<input type=\"radio\" name=\"año\" value=Todos>Todos<br>");
+		if(years.size()!=0){
+			out.println("<input type=\"radio\" name=\"año\" value=Todos>Todos<br>");
+			return true;
+		}else{
+			out.println("<strong>Ups! Tu consulta no ha devuelto ningún resultado</strong><br>");
+			return false;
+		}
 	}
 	
-	void getAlbumsPerYear(PrintWriter out, String año) throws XPathExpressionException{
+	boolean getAlbumsPerYear(PrintWriter out, String año) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		Map<Integer, List<String>> albums = new TreeMap<Integer, List<String>>();
 		String expression = "";
@@ -348,10 +367,16 @@ public class Sint152P2 extends HttpServlet {
 				checked = "";
 			}
 		}
-		out.println("<input type=\"radio\" name=\"album\" value=Todos>Todos<br>");
+		if(albums.size()!=0){
+			out.println("<input type=\"radio\" name=\"album\" value=Todos>Todos<br>");
+			return true;
+		}else{
+			out.println("<strong>Ups! Tu consulta no ha devuelto ningún resultado</strong><br>");
+			return false;
+		}
 	}
 	
-	void getStyle(PrintWriter out, String año, String album) throws XPathExpressionException{
+	boolean getStyle(PrintWriter out, String año, String album) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		ArrayList<String> styles = new ArrayList<String>();
 		String expression = "";
@@ -375,7 +400,13 @@ public class Sint152P2 extends HttpServlet {
 			out.println("<input type=\"radio\" name=\"estilo\" value=" + style.replace(" ", "+") + checked + ">" + style + "<br>");
 			checked = "";
 		}
-		out.println("<input type=\"radio\" name=\"estilo\" value=Todos>Todos<br>");
+		if(styles.size()!=0){
+			out.println("<input type=\"radio\" name=\"estilo\" value=Todos>Todos<br>");
+			return true;
+		}else{
+			out.println("<strong>Ups! Tu consulta no ha devuelto ningún resultado</strong><br>");
+			return false;
+		}
 	}
 	
 	void getNumber(PrintWriter out, String año, String album, String style) throws XPathExpressionException{
