@@ -29,6 +29,7 @@ public class Sint152P2 extends HttpServlet {
 		dbf.setValidating(true);
 		Document doc = null;
 		String path = "/home/jacoboqc/public_html/webapps/WEB-INF/radiohead.xml"/*"http://clave.det.uvigo.es:8080/~sint152/webapps/WEB-INF/radiohead.xml"*/;
+		String relative = path.replaceFirst(new File(path).getName(), "");
 		NodeList nextIMLs = null;
 		String nextIML = "";
 		ArrayList<String> imls = new ArrayList<String>();
@@ -45,7 +46,7 @@ public class Sint152P2 extends HttpServlet {
 				for(int j = 0; j<nextIMLs.getLength(); j++){
 					nextIML = nextIMLs.item(j).getTextContent();
 					if(!nextIML.startsWith("/"/*"http://"*/)){
-						path = path.replaceFirst(new File(path).getName(), nextIML);
+						path = relative + nextIML;
 					}else path = nextIML;
 					if(!imls.contains(path)) imls.add(path);
 				}
@@ -237,7 +238,6 @@ public class Sint152P2 extends HttpServlet {
 		out.println("<input type=\"radio\" name=\"interprete\" value=Todos>Todos<br>");
 	}
 	
-	//LISTO
 	void getAlbumsPerArtist(PrintWriter out, String artist) throws XPathExpressionException{
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		Map<Integer, List<String>> albums = new TreeMap<Integer, List<String>>();
