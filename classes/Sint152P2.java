@@ -29,8 +29,7 @@ public class Sint152P2 extends HttpServlet {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setValidating(true);
 		Document doc = null;
-		String path = "/home/jacoboqc/Descargas/sabina.xml";
-		//String path = "http://clave.det.uvigo.es:8080/~sint152/webapps/WEB-INF/radiohead.xml";
+		String path = "http://clave.det.uvigo.es:8080/~sintprof/15-16/p2/sabina.xml";
 		String relative = path.replaceFirst(new File(path).getName(), "");
 		NodeList nextIMLs = null;
 		String nextIML = "";
@@ -40,14 +39,13 @@ public class Sint152P2 extends HttpServlet {
 			try{
 				DocumentBuilder db = dbf.newDocumentBuilder();
 				db.setErrorHandler(new XML_DTD_ErrorHandler());
-				doc = db.parse(imls.get(i));
-				//doc = db.parse(new URL(imls.get(i)).openStream(), "http://localhost:8152/sint152/");
+				doc = db.parse(new URL(imls.get(i)).openStream(), "http://localhost:8152/sint152/");
 				XPath xpath= XPathFactory.newInstance().newXPath();
 				Element raiz = doc.getDocumentElement();
 				nextIMLs = (NodeList) xpath.evaluate("//IML", raiz, XPathConstants.NODESET);
 				for(int j = 0; j<nextIMLs.getLength(); j++){
 					nextIML = nextIMLs.item(j).getTextContent();
-					if(!nextIML.startsWith("/"/*"http://"*/)){
+					if(!nextIML.startsWith("http://")){
 						path = relative + nextIML;
 					}else path = nextIML;
 					if(!imls.contains(path)) imls.add(path);
@@ -96,6 +94,7 @@ public class Sint152P2 extends HttpServlet {
 		out.println("<html>");
 		out.println("<head>");
 		out.println("<title>Servicio de consulta</title>");
+		out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"iml.css\">");
 		out.println("</head>");
 		out.println("<body>");
 		out.println("<div align=\"center\">");
@@ -117,13 +116,13 @@ public class Sint152P2 extends HttpServlet {
 			if(consulta==0 || fase==0){
 				if(!errors.isEmpty()){
 					out.println("<div class=\"table\">");
-					out.println("<strong>Ha habido errores de parseo</strong><br>");
+					out.println("<strong>Ha habido errores de parseo:</strong><br>");
 					Iterator it = errors.iterator();
 					while(it.hasNext()){
 						out.println(it.next() + "<br>");
 					}
 					if(docs.size()==0) out.println("No se ha podido parsear ningún fichero<br>");
-					else out.println("Sólo se han podido parsear " + docs.size() + " fichero(s)<br>");
+					else out.println("Sólo se han podido parsear " + docs.size() + " fichero(s).<br>");
 					out.println("</div>");
 				}
 				if(!docs.isEmpty()){
